@@ -80,7 +80,7 @@ class _ChatScreenState extends State<ChatScreen>
                       style: TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        fontSize: 18, 
                       ),
                     ),
                   ),
@@ -93,3 +93,4 @@ class _ChatScreenState extends State<ChatScreen>
     );
   }
 }
+//testttttttttttttttttttttttttttttttttttttttttttttttttttttttt
