@@ -21,6 +21,7 @@ class _EregesyerScreenState extends State<EregesyerScreen> {
   final TextEditingController _codeController = TextEditingController();
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _idNumberController = TextEditingController();
+  String? _employeeType;
   int _currentStep = 0;
   bool _isArabic = true;
   bool _isLoading = false;
@@ -82,6 +83,10 @@ class _EregesyerScreenState extends State<EregesyerScreen> {
                 const SizedBox(height: 8),
                 Text(
                   "${_isArabic ? "رقم الهوية" : "ID Number"}: ${_idNumberController.text}",
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  "${_isArabic ? "نوع الموظف" : "Employee Type"}: $_employeeType",
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -315,17 +320,63 @@ class _EregesyerScreenState extends State<EregesyerScreen> {
                         ),
                         onChanged: (value) => setState(() {}),
                       ),
+                      const SizedBox(height: 20),
+                      DropdownButtonFormField<String>(
+                        value: _employeeType,
+                        hint: Text(
+                          _isArabic
+                              ? 'اختر نوع الموظف'
+                              : 'Select Employee Type',
+                        ),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _employeeType = newValue;
+                          });
+                        },
+                        items: <String>['كهرباء', 'ماء', 'بلدية']
+                            .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            })
+                            .toList(),
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 15,
+                            horizontal: 20,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color.fromARGB(255, 166, 216, 48),
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color.fromARGB(255, 158, 202, 56),
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 30),
                       ElevatedButton(
                         onPressed: () {
                           if (_fullNameController.text.isEmpty ||
-                              _idNumberController.text.isEmpty) {
+                              _idNumberController.text.isEmpty ||
+                              _employeeType == null) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
                                   _isArabic
-                                      ? 'الرجاء إدخال الاسم الرباعي ورقم الهوية'
-                                      : 'Please enter full name and ID number',
+                                      ? 'الرجاء إدخال جميع البيانات المطلوبة'
+                                      : 'Please enter all required fields',
                                 ),
                               ),
                             );
@@ -625,6 +676,11 @@ class _EregesyerScreenState extends State<EregesyerScreen> {
                       _buildInfoRow(
                         _isArabic ? 'رقم الهوية' : 'ID Number',
                         _idNumberController.text,
+                      ),
+                      const Divider(height: 30),
+                      _buildInfoRow(
+                        _isArabic ? 'نوع الموظف' : 'Employee Type',
+                        _employeeType ?? '',
                       ),
                       const Divider(height: 30),
                       _buildInfoRow(
